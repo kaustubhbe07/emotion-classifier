@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion Classification | Minimal NLP Interface</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-badge">
+        <span class="pulse-dot"></span>
+        <span>BiGRU NLP Engine</span>
+      </div>
+      <h1 class="app-title">Emotion Analysis</h1>
+      <p class="app-subtitle">Classify sentiment and nuanced emotional tone from natural language.</p>
+    </header>
+
+    <!-- Main Input Card -->
+    <main class="card">
+      <!-- Quick Prompt Chips -->
+      <section class="chips-section" aria-label="Sample Prompts">
+        <span class="chips-label">Try a sample prompt</span>
+        <div class="chips-list">
+          <button type="button" class="chip-btn" data-prompt="I feel so joyful and grateful for everything today">
+            <span>😄</span><span>Joy</span>
+          </button>
+          <button type="button" class="chip-btn" data-prompt="I feel incredibly blessed and in love with my life">
+            <span>❤️</span><span>Love</span>
+          </button>
+          <button type="button" class="chip-btn" data-prompt="I feel so empty and completely hopeless inside">
+            <span>😢</span><span>Sadness</span>
+          </button>
+          <button type="button" class="chip-btn" data-prompt="I feel amazed and stunned by this wonderful news">
+            <span>😲</span><span>Surprise</span>
+          </button>
+          <button type="button" class="chip-btn" data-prompt="I feel terrified and anxious about what might happen">
+            <span>😨</span><span>Fear</span>
+          </button>
+          <button type="button" class="chip-btn" data-prompt="I feel so irritated and furious with this situation">
+            <span>😠</span><span>Anger</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Textarea Input Area -->
+      <div class="input-wrapper">
+        <textarea 
+          id="textInput" 
+          class="text-input" 
+          placeholder="Type or paste a sentence (e.g., 'i feel happy and energized today')..." 
+          maxlength="2000"
+          rows="4"
+          aria-label="Text to analyze"
+        ></textarea>
+        <div class="input-footer">
+          <span>Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to analyze</span>
+          <span id="charCount">0 / 2,000</span>
+        </div>
+      </div>
+
+      <!-- Inline Alert / Error Banner -->
+      <div id="alertBox" class="alert-box" role="alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="alertMessage"></span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-bar">
+        <button id="clearBtn" class="btn btn-secondary" type="button">Clear</button>
+        <button id="analyzeBtn" class="btn btn-primary" type="button">
+          <span id="btnSpinner" class="spinner" style="display: none;"></span>
+          <span id="btnLabel">Analyze Emotion</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Prediction Results Section -->
+    <section id="resultsContainer" class="card results-container" aria-live="polite">
+      <!-- Primary Emotion Hero Card -->
+      <div class="hero-card">
+        <div class="hero-left">
+          <span id="heroEmoji" class="hero-emoji" role="img" aria-label="Emotion Emoji">✨</span>
+          <div class="hero-title-group">
+            <span class="label-sub">Primary Emotion</span>
+            <h2 id="heroEmotion" class="hero-emotion-name">Neutral</h2>
+          </div>
+        </div>
+        <span id="heroConfidence" class="hero-confidence-badge">0.0% Confidence</span>
+      </div>
+
+      <!-- Probability Distribution Breakdown -->
+      <h3 class="breakdown-title">Emotion Distribution</h3>
+      <div id="probList" class="prob-list">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <span>Powered by FastAPI &amp; Bidirectional GRU &bull; <a href="/docs" target="_blank" rel="noopener">Interactive API Docs</a></span>
+    </footer>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
