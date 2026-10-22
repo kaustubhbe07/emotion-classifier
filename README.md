@@ -10,12 +10,12 @@ Sentiment analysis often stops at binary polarity (positive vs. negative). This 
 
 | Emotion | Emoji | Sample Input |
 | :--- | :---: | :--- |
-| **Joy** | 😄 | *"i feel so joyful and grateful for everything today"* |
-| **Love** | ❤️ | *"i feel incredibly blessed and in love with my life"* |
-| **Sadness** | 😢 | *"i feel so empty and completely hopeless inside"* |
-| **Surprise** | 😲 | *"i feel amazed and stunned by this wonderful news"* |
-| **Fear** | 😨 | *"i feel terrified and anxious about what might happen"* |
-| **Anger** | 😠 | *"i feel so irritated and furious with this situation"* |
+| **Joy** | 😄 | *"I feel so joyful and grateful for everything today"* |
+| **Love** | ❤️ | *"I feel incredibly blessed and in love with my life"* |
+| **Sadness** | 😢 | *"I feel so empty and completely hopeless inside"* |
+| **Surprise** | 😲 | *"I feel amazed and stunned by this wonderful news"* |
+| **Fear** | 😨 | *"I feel terrified and anxious about what might happen"* |
+| **Anger** | 😠 | *"I feel so irritated and furious with this situation"* |
 
 ---
 
@@ -39,19 +39,19 @@ Sentiment analysis often stops at binary polarity (positive vs. negative). This 
 Natural Language Input
         │
         ▼
-Text Preprocessing (Regex lowercase, clean punctuation)
+Text Preprocessing
         │
         ▼
-Tokenizer & Sequence Padding (maxlen = 66, post-padding)
+Tokenizer & Sequence Padding
         │
         ▼
-BiGRU Deep Learning Model (Keras / TensorFlow)
+BiGRU Deep Learning Model
         │
         ▼
-Softmax Probabilities (Joy, Love, Sadness, Anger, Fear, Surprise)
+Softmax Probabilities
         │
         ▼
-FastAPI Backend (Lifespan + Threadpool Dispatch)
+FastAPI Backend
         │
         ▼
 Vanilla HTML / CSS / JS Minimal Web Interface
@@ -59,7 +59,7 @@ Vanilla HTML / CSS / JS Minimal Web Interface
 
 - **Backend**: Python 3.10+, FastAPI, Uvicorn, Pydantic
 - **Deep Learning**: TensorFlow, Keras (BiGRU sequential architecture)
-- **Frontend**: Semantic HTML5, Vanilla CSS (Swiss minimal light design), Vanilla JavaScript
+- **Frontend**: HTML, CSS ,JavaScript
 
 ---
 
@@ -68,7 +68,7 @@ Vanilla HTML / CSS / JS Minimal Web Interface
 ```text
 Emotion-Classification/
 ├── Artifacts/
-│   ├── BiGRU_Model.keras         # Trained Bidirectional GRU model (35.8 MB)
+│   ├── BiGRU_Model.keras         # Trained Bidirectional GRU model
 │   └── tokenizer.pkl             # Fitted Keras/Pickle Tokenizer vocabulary
 ├── static/
 │   ├── index.html                # Responsive web interface
@@ -77,7 +77,7 @@ Emotion-Classification/
 ├── main.py                       # FastAPI application & inference pipeline
 ├── requirements.txt              # Pinned Python dependencies
 ├── .gitignore                    # Git ignore rules for Python & venv
-└── Emotion_Claasification.ipynb  # Model training & experimentation notebook
+└── notebook.ipynb                # Model training & experimentation notebook
 ```
 
 ---
@@ -86,8 +86,8 @@ Emotion-Classification/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/<YOUR_REPOSITORY_NAME>.git
-cd <YOUR_REPOSITORY_NAME>
+git clone https://github.com/kaustubhbe07/emotion-classifier.git
+cd emotion-classifier
 ```
 
 ### 2. Create and Activate Virtual Environment
@@ -145,19 +145,14 @@ Open your browser and navigate to:
 {
   "text": "i feel so joyful and grateful for everything today",
   "predicted_emotion": "joy",
-  "confidence": 0.9984,
+  "confidence": 0.9995111227035522,
   "all_probabilities": {
-    "sadness": 0.0003,
-    "joy": 0.9984,
-    "love": 0.0008,
-    "anger": 0.0001,
-    "fear": 0.0002,
-    "surprise": 0.0002
+    "sadness": 0.00020418022177182138,
+    "joy": 0.9995111227035522,
+    "love": 0.0002163182944059372,
+    "anger": 0.000011838810678455047,
+    "fear": 0.000039247046515811235,
+    "surprise": 0.00001728801908029709
   }
 }
 ```
-
----
-
-## 📜 License
-This project is open-source and available under the [MIT License](LICENSE).
