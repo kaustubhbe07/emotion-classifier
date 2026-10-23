@@ -15,7 +15,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 #Constants Required
 model_path = "Artifacts/BiGRU_Model.keras"
 tokenizer_path = "Artifacts/tokenizer.pkl"
-max_sequence_length = 66
+max_sequence_length = 178
 emotion_labels = ["sadness", "joy", "love", "anger", "fear", "surprise"]
 EMOTION_EMOJIS = {
     "sadness": "😢",

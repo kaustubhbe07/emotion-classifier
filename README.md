@@ -19,16 +19,53 @@ Sentiment analysis often stops at binary polarity (positive vs. negative). This 
 
 ---
 
+## 📊 Dataset
+
+The model is trained on the comprehensive [`dair-ai/emotion`](https://huggingface.co/datasets/dair-ai/emotion) dataset from Hugging Face (`unsplit` configuration):
+
+- **Dataset Link**: [Hugging Face - dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)
+- **Total Dataset Size**: **416,809 samples**
+- **Data Splits (Stratified Split)**:
+  - **Training Set (80%)**: `333,447` samples
+  - **Validation Set (10%)**: `41,681` samples
+  - **Test Set (10%)**: `41,681` samples
+- **Vocabulary & Sequences**:
+  - Vocabulary Limit (`max_words`): `60,000` tokens (`67,866` unique words in corpus)
+  - Maximum Sequence Length (`max_len`): `178` tokens
+  - Out-of-Vocabulary (OOV) Token: `<ukn>`
+- **Imbalance Handling**: Class weights computed via `sklearn.utils.class_weight.compute_class_weight` to ensure balanced gradient updates across all 6 emotion classes.
+
+---
+
+## 📈 Model Performance & Metrics
+
+Both **BiGRU** and **BiLSTM** architectures were trained and evaluated on **41,681 unseen test samples**:
+
+| Model | Architecture | Parameters | Test Loss | Test Accuracy |
+| :--- | :--- | :---: | :---: | :---: |
+| **BiLSTM** | Bidirectional LSTM (128 -> 64) | 15.92M | 0.1129 | **94.01%** |
+| **BiGRU (Deployed)** | Bidirectional GRU (128 -> 64) | 15.78M | 0.1139 | **93.93%** |
+
+### Why BiGRU Was Selected for Deployment
+While BiLSTM achieved a marginally higher accuracy (+0.08%), **BiGRU was selected for production** because:
+1. **Structural Efficiency**: GRUs utilize only two gates (reset and update) compared to LSTM's three gates (input, forget, and output), requiring fewer matrix multiplications per timestep.
+2. **Reduced Latency**: Faster inference execution and lower memory overhead, making it ideal for real-time REST API serving with FastAPI.
+3. **Comparable Accuracy**: Reaches ~94% accuracy with identical generalization quality across all 6 emotion categories.
+
+### Training Configuration
+- **Loss**: `sparse_categorical_crossentropy`
+- **Optimizer**: `adam`
+- **Batch Size**: 64
+- **Epochs**: 25 (with `EarlyStopping` monitoring `val_loss` at patience=3 and `ModelCheckpoint` restoring best weights)
+
+---
+
 ## ✨ Key Features
 
 - **Bidirectional GRU (BiGRU)**: Captures context from both directions in text sequences, yielding nuanced emotion representations.
 - **FastAPI Lifespan Management**: Model and tokenizer load once on server boot and clear on shutdown, avoiding repetitive disk I/O.
 - **Input Sanitization & Validation**: Detects and cleanly rejects whitespace or symbol-only inputs (`???!!!`) with HTTP 400 instead of false-confidence predictions.
-- **Minimal Light UI**: Built with pure Vanilla HTML5, CSS3, and JavaScript—zero bloated external frameworks. Includes:
-  - 1-click dataset-aligned sample prompt chips
-  - Live character counter (`0 / 2,000`)
-  - Keyboard shortcut (`Ctrl + Enter`) for instant submission
-  - Dynamic, animated probability breakdown bars sorted by confidence
+- **Minimal Light UI**: Built with pure Vanilla HTML5, CSS3, and JavaScript. 
 - **Interactive OpenAPI Docs**: Auto-generated interactive Swagger UI at `/docs`.
 
 ---
@@ -39,10 +76,10 @@ Sentiment analysis often stops at binary polarity (positive vs. negative). This 
 Natural Language Input
         │
         ▼
-Text Preprocessing
+Text Preprocessing (Regex clean, lowercase)
         │
         ▼
-Tokenizer & Sequence Padding
+Tokenizer & Sequence Padding (maxlen = 178)
         │
         ▼
 BiGRU Deep Learning Model
@@ -68,16 +105,17 @@ Vanilla HTML / CSS / JS Minimal Web Interface
 ```text
 Emotion-Classification/
 ├── Artifacts/
-│   ├── BiGRU_Model.keras         # Trained Bidirectional GRU model
-│   └── tokenizer.pkl             # Fitted Keras/Pickle Tokenizer vocabulary
+│   ├── BiGRU_Model.keras        
+│   └── tokenizer.pkl             
 ├── static/
-│   ├── index.html                # Responsive web interface
-│   ├── style.css                 # Minimal light mode design system
-│   └── script.js                 # Frontend API client & animation logic
-├── main.py                       # FastAPI application & inference pipeline
-├── requirements.txt              # Pinned Python dependencies
-├── .gitignore                    # Git ignore rules for Python & venv
-└── notebook.ipynb                # Model training & experimentation notebook
+│   ├── index.html                
+│   ├── style.css                 
+│   └── script.js                
+├── main.py                       
+├── requirements.txt              
+├── .gitignore                    
+├── README.md                     
+└── notebook.ipynb                
 ```
 
 ---
@@ -145,14 +183,14 @@ Open your browser and navigate to:
 {
   "text": "i feel so joyful and grateful for everything today",
   "predicted_emotion": "joy",
-  "confidence": 0.9995111227035522,
+  "confidence": 0.9998859167098999,
   "all_probabilities": {
-    "sadness": 0.00020418022177182138,
-    "joy": 0.9995111227035522,
-    "love": 0.0002163182944059372,
-    "anger": 0.000011838810678455047,
-    "fear": 0.000039247046515811235,
-    "surprise": 0.00001728801908029709
+    "sadness": 0.000008609986252849922,
+    "joy": 0.9998859167098999,
+    "love": 0.0000377257056243252,
+    "anger": 0.0000012591327731570345,
+    "fear": 0.00002126986328221392,
+    "surprise": 0.00004521963273873553
   }
 }
 ```
